@@ -1,0 +1,634 @@
+/* ==========================================================================
+   StockPredict AI - Modern Fintech & AI Dashboard Theme
+   Aesthetic: Dark navy/black background, subtle gradients, clean glassmorphism,
+   crisp typography, emerald accent, and responsive spacing.
+   ========================================================================== */
+
+:root {
+    /* Color Palette */
+    --bg-main: #080D1A;
+    --bg-secondary: #0F172A;
+    --bg-card: rgba(17, 24, 39, 0.72);
+    --bg-card-hover: rgba(22, 32, 51, 0.85);
+    --bg-input: rgba(15, 23, 42, 0.85);
+
+    /* Borders */
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-glass-light: rgba(255, 255, 255, 0.14);
+    --border-emerald: rgba(16, 185, 129, 0.35);
+
+    /* Text Colors */
+    --text-white: #F8FAFC;
+    --text-slate: #CBD5E1;
+    --text-dim: #94A3B8;
+    --text-muted: #64748B;
+
+    /* Accents */
+    --emerald: #10B981;
+    --emerald-hover: #059669;
+    --emerald-glow: rgba(16, 185, 129, 0.2);
+    --cyan: #38BDF8;
+    --cyan-glow: rgba(56, 189, 248, 0.15);
+    --rose: #F43F5E;
+    --rose-glow: rgba(244, 63, 94, 0.15);
+    --amber: #F59E0B;
+
+    /* Typography */
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', Menlo, Consolas, monospace;
+
+    /* Radius & Shadows */
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --shadow-card: 0 12px 36px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-glass);
+    --shadow-hover: 0 16px 44px -8px rgba(0, 0, 0, 0.75), 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+/* Base Body Setup */
+body.fintech-theme {
+    background-color: var(--bg-main);
+    background-image: 
+        radial-gradient(circle at 15% 10%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 60%, rgba(56, 189, 248, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.04) 0%, transparent 45%);
+    background-attachment: fixed;
+    color: var(--text-slate);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-white);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.text-emerald { color: var(--emerald) !important; }
+.text-cyan { color: var(--cyan) !important; }
+.text-rose { color: var(--rose) !important; }
+.text-amber { color: var(--amber) !important; }
+.text-slate { color: var(--text-slate) !important; }
+.text-dim { color: var(--text-dim) !important; }
+
+.font-mono {
+    font-family: var(--font-mono) !important;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #10B981 0%, #38BDF8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.glass-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--border-glass-light);
+}
+
+.card-eyebrow {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--emerald);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.card-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.border-top-glass {
+    border-top: 1px solid var(--border-glass) !important;
+}
+
+/* ================= 1. NAVBAR ================= */
+.glass-navbar {
+    background: rgba(8, 13, 26, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 0.85rem 0;
+    z-index: 1000;
+}
+
+.brand-logo-glow {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.brand-title {
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--text-white);
+    line-height: 1.15;
+}
+
+.accent-text {
+    color: var(--emerald);
+}
+
+.brand-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: -0.01em;
+}
+
+.glass-navbar .nav-link {
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+}
+
+.glass-navbar .nav-link:hover {
+    color: var(--text-white);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ml-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid var(--border-emerald);
+    color: var(--emerald);
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+.pulse-indicator {
+    width: 7px;
+    height: 7px;
+    background-color: var(--emerald);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--emerald);
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ================= 2. HERO SECTION ================= */
+.hero-section {
+    padding: 4.5rem 1rem 3rem;
+}
+
+.hero-chip {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-glass-light);
+    color: var(--text-slate);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.35rem 0.95rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hero-title {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+}
+
+.hero-subtitle {
+    font-size: 1.12rem;
+    color: var(--text-dim);
+    max-width: 620px;
+    line-height: 1.6;
+}
+
+.trust-line {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+}
+
+/* Buttons */
+.btn-emerald-primary {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.68rem 1.45rem;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-emerald-primary:hover,
+.btn-emerald-primary:focus {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass-light);
+    color: var(--text-slate);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--radius-sm);
+    padding: 0.68rem 1.45rem;
+    transition: all 0.2s ease;
+}
+
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-outline-glass {
+    background: transparent;
+    border: 1px solid var(--border-glass-light);
+    color: var(--text-slate);
+    font-size: 0.84rem;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    transition: all 0.15s ease;
+}
+
+.btn-outline-glass:hover {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: var(--emerald);
+    color: var(--emerald);
+}
+
+/* ================= 3. STOCK SELECTION PANEL ================= */
+.form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.form-select-glass,
+.form-control-glass {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-glass);
+    color: var(--text-white);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.95rem;
+    font-size: 0.92rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-select-glass option,
+.form-select-glass optgroup {
+    background-color: #0F172A;
+    color: var(--text-white);
+}
+
+.form-select-glass:focus,
+.form-control-glass:focus {
+    background-color: #111C33;
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px var(--emerald-glow);
+    color: var(--text-white);
+    outline: none;
+}
+
+.badge-currency {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: var(--cyan);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.btn-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-slate);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    transition: all 0.15s ease;
+}
+
+.btn-chip:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--emerald);
+    color: var(--emerald);
+}
+
+/* ================= 4. CURRENT MARKET OVERVIEW ================= */
+.badge-symbol {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-sm);
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card-highlight {
+    border-color: var(--border-emerald);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, rgba(17, 24, 39, 0.8) 100%);
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+.stat-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 1.15rem;
+}
+
+.icon-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: var(--border-emerald);
+    color: var(--emerald);
+}
+
+.icon-rose {
+    background: rgba(244, 63, 94, 0.12);
+    border-color: rgba(244, 63, 94, 0.3);
+    color: var(--rose);
+}
+
+.stat-value {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--text-white);
+    line-height: 1.2;
+    margin: 0.3rem 0;
+}
+
+.stat-meta {
+    font-size: 0.82rem;
+}
+
+.badge-trend {
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm);
+}
+
+.trend-bullish {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--emerald);
+    border: 1px solid var(--border-emerald);
+}
+
+.trend-bearish {
+    background: rgba(244, 63, 94, 0.15);
+    color: var(--rose);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+/* ================= 5. MAIN CHART SECTION ================= */
+.badge-forecast-days {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid var(--border-emerald);
+    color: var(--emerald);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-sm);
+}
+
+.glass-btn-group {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+}
+
+.btn-chart-filter {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+
+.btn-chart-filter:hover {
+    color: var(--text-white);
+}
+
+.btn-chart-filter.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-white);
+}
+
+.chart-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 420px;
+}
+
+@media (max-width: 768px) {
+    .chart-canvas-container {
+        height: 300px;
+    }
+}
+
+.legend-line {
+    display: inline-block;
+    width: 22px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+.line-history { background-color: #94A3B8; }
+.line-forecast { background-color: var(--emerald); border-top: 2px dashed var(--emerald); }
+
+/* ================= 6. MODEL PERFORMANCE SECTION ================= */
+.metric-box {
+    border-radius: var(--radius-md);
+}
+
+.metric-header {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+}
+
+.metric-primary-val {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
+}
+
+.metric-caption {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+/* ================= 7. AI INSIGHT CARD ================= */
+.insight-card {
+    border-color: rgba(16, 185, 129, 0.25);
+    background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, rgba(17, 24, 39, 0.8) 70%);
+}
+
+.insight-badge-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid var(--border-emerald);
+    color: var(--emerald);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+}
+
+.insight-content {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-glass-light);
+}
+
+.insight-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-white);
+    line-height: 1.6;
+}
+
+.disclaimer-callout {
+    background: rgba(245, 158, 11, 0.06);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+}
+
+.disclaimer-text {
+    font-size: 0.82rem;
+    color: #E2E8F0;
+    line-height: 1.5;
+}
+
+/* ================= 8. ABOUT MODEL SECTION ================= */
+.pipeline-step-box {
+    position: relative;
+    padding: 1.25rem 0.75rem;
+}
+
+.step-icon-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass-light);
+    color: var(--text-slate);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin: 0 auto 0.75rem;
+    transition: all 0.25s ease;
+}
+
+.pipeline-step-box:hover .step-icon-circle {
+    border-color: var(--emerald);
+    color: var(--emerald);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+    transform: scale(1.05);
+}
+
+.highlight-step {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--border-emerald);
+    color: var(--emerald);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
+}
+
+.step-number {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--emerald);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.step-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 0.35rem;
+}
+
+.step-desc {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin-bottom: 0;
+}
+
+/* ================= 9. FOOTER ================= */
+.fintech-footer {
+    background: rgba(5, 8, 17, 0.95);
+    border-top: 1px solid var(--border-glass);
+}

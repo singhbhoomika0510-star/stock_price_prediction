@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockPredict AI — Machine Learning Stock Forecasting</title>
+    
+    <!-- Modern Fintech Typography: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Modern AI Fintech Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="fintech-theme">
+
+    <!-- 1. TOP NAVBAR (Sticky Glassmorphic) -->
+    <nav class="navbar navbar-expand-lg sticky-top glass-navbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#hero">
+                <div class="brand-logo-glow">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="d-flex flex-column">
+                    <span class="brand-title">StockPredict <span class="accent-text">AI</span></span>
+                    <span class="brand-subtitle">Machine Learning Stock Forecasting</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0 text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav mx-auto align-items-lg-center gap-1 gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="#hero">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#stock-panel">Predict</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#chart-section">Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#performance-section">Model</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-section">About</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <span class="ml-badge">
+                        <span class="pulse-indicator"></span>
+                        ML Powered
+                    </span>
+                    <button class="btn btn-outline-glass btn-sm d-none d-md-inline-flex" onclick="selectQuickStock('RELIANCE.NS')">
+                        <i class="bi bi-lightning-charge me-1"></i> Try Reliance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <header class="hero-section" id="hero">
+        <div class="container text-center">
+            <div class="hero-chip mx-auto mb-3">
+                <i class="bi bi-cpu text-emerald me-2"></i> Real-Time Time-Series Forecasting
+            </div>
+
+            <h1 class="hero-title">
+                Predict Tomorrow's Market.<br>
+                <span class="gradient-text">With Machine Learning.</span>
+            </h1>
+
+            <p class="hero-subtitle mx-auto">
+                Analyze historical stock patterns and generate data-driven future price estimates.
+            </p>
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="#stock-panel" class="btn btn-emerald-primary btn-lg">
+                    Start Prediction →
+                </a>
+                <a href="#about-section" class="btn btn-glass-secondary btn-lg">
+                    How It Works
+                </a>
+            </div>
+
+            <div class="trust-line mt-4">
+                <i class="bi bi-shield-check text-emerald me-1"></i> Powered by Historical Market Data + Machine Learning
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container my-5">
+
+        <!-- 3. STOCK SELECTION PANEL -->
+        <section id="stock-panel" class="mb-5">
+            <div class="glass-card panel-card p-4 p-md-5">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+                    <div>
+                        <span class="card-eyebrow">CONFIGURATION</span>
+                        <h2 class="card-heading mb-0">Choose Your Stock</h2>
+                    </div>
+                    <span class="badge badge-currency">All figures in Indian Rupees (₹)</span>
+                </div>
+
+                <form id="predictionForm" onsubmit="handleFormSubmit(event)">
+                    <div class="row g-3 g-md-4 align-items-end">
+                        
+                        <!-- Company Dropdown -->
+                        <div class="col-lg-4 col-md-6">
+                            <label for="stockSelect" class="form-label text-slate">Stock / Company</label>
+                            <div class="input-glass-group">
+                                <select id="stockSelect" class="form-select form-select-glass" onchange="handleStockPresetChange(this.value)">
+                                    <optgroup label="Popular Indian Stocks (NSE)">
+                                        <option value="RELIANCE.NS" selected>Reliance Industries (RELIANCE)</option>
+                                        <option value="TCS.NS">Tata Consultancy Services (TCS)</option>
+                                        <option value="INFY.NS">Infosys (INFY)</option>
+                                        <option value="TATAMOTORS.NS">Tata Motors (TATAMOTORS)</option>
+                                        <option value="HDFCBANK.NS">HDFC Bank (HDFCBANK)</option>
+                                        <option value="SBIN.NS">State Bank of India (SBIN)</option>
+                                        <option value="ICICIBANK.NS">ICICI Bank (ICICIBANK)</option>
+                                    </optgroup>
+                                    <optgroup label="US Equities">
+                                        <option value="AAPL">Apple Inc. (AAPL)</option>
+                                        <option value="MSFT">Microsoft Corporation (MSFT)</option>
+                                    </optgroup>
+                                    <option value="CUSTOM">-- Enter Custom Ticker Symbol --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Stock Symbol -->
+                        <div class="col-lg-3 col-md-6">
+                            <label for="customTicker" class="form-label text-slate">Stock Symbol</label>
+                            <input type="text" id="customTicker" class="form-control form-control-glass font-mono" placeholder="e.g. RELIANCE.NS, TCS.NS" value="RELIANCE.NS" required>
+                        </div>
+
+                        <!-- Historical Data Period -->
+                        <div class="col-lg-2 col-md-6">
+                            <label for="periodSelect" class="form-label text-slate">Historical Data</label>
+                            <select id="periodSelect" class="form-select form-select-glass">
+                                <option value="6mo">Last 6 Months</option>
+                                <option value="1y" selected>Last 1 Year</option>
+                                <option value="2y">Last 2 Years</option>
+                                <option value="5y">Last 5 Years</option>
+                            </select>
+                        </div>
+
+                        <!-- Prediction Horizon & Predict Button -->
+                        <div class="col-lg-3 col-md-6">
+                            <label for="horizonSelect" class="form-label text-slate">Prediction Horizon</label>
+                            <div class="d-flex gap-2">
+                                <select id="horizonSelect" class="form-select form-select-glass">
+                                    <option value="1">1 Day</option>
+                                    <option value="7" selected>7 Days</option>
+                                    <option value="14">14 Days</option>
+                                    <option value="30">30 Days</option>
+                                </select>
+                                <button type="submit" id="trainBtn" class="btn btn-emerald-primary flex-shrink-0 px-4">
+                                    <span id="btnSpinner" class="spinner-border spinner-border-sm me-1 d-none" role="status"></span>
+                                    <span id="btnText">Predict</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Quick Stock Selector Chips -->
+                    <div class="quick-chips-row mt-4 pt-3 border-top-glass d-flex flex-wrap align-items-center gap-2">
+                        <span class="text-dim small me-1">Quick Select:</span>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('RELIANCE.NS')">Reliance</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('TCS.NS')">TCS</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('INFY.NS')">Infosys</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('TATAMOTORS.NS')">Tata Motors</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('HDFCBANK.NS')">HDFC Bank</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('SBIN.NS')">SBI</button>
+                        <button type="button" class="btn-chip" onclick="selectQuickStock('AAPL')">Apple</button>
+                    </div>
+                </form>
+
+                <!-- Alert Message Container -->
+                <div id="alertContainer" class="mt-3 d-none"></div>
+            </div>
+        </section>
+
+        <!-- 4. CURRENT MARKET OVERVIEW (3 Premium Statistic Cards) -->
+        <section id="overview-section" class="mb-5">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <h2 class="h4 fw-bold text-white mb-0" id="stockNameDisplay">Reliance Industries</h2>
+                    <span class="badge badge-symbol font-mono" id="stockTickerDisplay">RELIANCE.NS</span>
+                </div>
+                <span class="text-dim small" id="stockMetaDisplay">Historical Lookback: 1Y • Active Session</span>
+            </div>
+
+            <div class="row g-4">
+                
+                <!-- CURRENT PRICE -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="glass-card stat-card h-100 p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="stat-label">CURRENT PRICE</span>
+                            <div class="stat-icon-wrapper">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value font-mono" id="currentPriceDisplay">₹ 0.00</div>
+                        <div class="stat-meta text-dim" id="lastDateDisplay">
+                            <i class="bi bi-clock-history me-1"></i> Latest recorded market close
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREDICTED PRICE -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="glass-card stat-card stat-card-highlight h-100 p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="stat-label text-emerald">PREDICTED PRICE</span>
+                            <div class="stat-icon-wrapper icon-emerald">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value text-emerald font-mono" id="predictedPriceDisplay">₹ 0.00</div>
+                        <div class="stat-meta text-dim" id="targetDateDisplay">
+                            <i class="bi bi-bullseye me-1"></i> Target: Calculating...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPECTED CHANGE -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="glass-card stat-card h-100 p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="stat-label">EXPECTED CHANGE</span>
+                            <div class="stat-icon-wrapper" id="changeIconWrapper">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value font-mono" id="priceDiffDisplay">+₹ 0.00</div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <span class="badge badge-trend" id="changePercentBadge">+0.00%</span>
+                            <span class="stat-meta text-dim" id="sentimentText">Calculating forecast</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. MAIN CHART SECTION -->
+        <section id="chart-section" class="mb-5">
+            <div class="glass-card p-4 p-md-5">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div>
+                        <span class="card-eyebrow">VISUALIZATION</span>
+                        <h3 class="card-heading mb-1">Price History & Forecast</h3>
+                        <p class="text-dim small mb-0">Historical closing prices plotted against the machine learning recursive projection.</p>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="badge badge-forecast-days" id="forecastBadge">Forecast: 7 Days</span>
+                        
+                        <div class="btn-group btn-group-sm glass-btn-group" role="group">
+                            <button type="button" class="btn btn-chart-filter active" id="btnFullView" onclick="setChartMode('full')">Full View</button>
+                            <button type="button" class="btn btn-chart-filter" id="btnForecastView" onclick="setChartMode('forecast')">Forecast Only</button>
+                            <button type="button" class="btn btn-chart-filter" id="btnTestView" onclick="setChartMode('test')">Model Fit Test</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Responsive Chart Wrapper -->
+                <div class="chart-canvas-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
+
+                <!-- Chart Legend Footer -->
+                <div class="chart-legend-row mt-4 pt-3 border-top-glass d-flex flex-wrap align-items-center gap-4 text-dim small">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="legend-line line-history"></span>
+                        <span><strong class="text-white">Historical Price:</strong> Daily recorded closing prices</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="legend-line line-forecast"></span>
+                        <span><strong class="text-emerald">Future Prediction:</strong> Linear Regression projection</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <span class="text-dim"><i class="bi bi-info-circle me-1"></i> Hover on data points to inspect prices</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MODEL PERFORMANCE SECTION -->
+        <section id="performance-section" class="mb-5">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div>
+                    <span class="card-eyebrow">EVALUATION METRICS</span>
+                    <h2 class="card-heading mb-0">Model Performance</h2>
+                </div>
+                <span class="text-dim small">Evaluated strictly on chronological unseen test set</span>
+            </div>
+
+            <div class="row g-3 g-md-4">
+                
+                <!-- Model Used -->
+                <div class="col-md-6 col-lg">
+                    <div class="glass-card metric-box h-100 p-4">
+                        <div class="metric-header text-dim">Model Used</div>
+                        <div class="metric-primary-val text-white">Linear Regression</div>
+                        <p class="metric-caption text-dim">
+                            Ordinary Least Squares (OLS) minimizing sum of squared prediction residuals.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- R² Score -->
+                <div class="col-md-6 col-lg">
+                    <div class="glass-card metric-box h-100 p-4">
+                        <div class="metric-header text-dim">R² Score</div>
+                        <div class="metric-primary-val text-emerald font-mono" id="r2ScoreDisplay">0.00</div>
+                        <p class="metric-caption text-dim" id="r2Explain">
+                            Measures the proportion of price variance captured by the model.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MAE -->
+                <div class="col-md-6 col-lg">
+                    <div class="glass-card metric-box h-100 p-4">
+                        <div class="metric-header text-dim">MAE</div>
+                        <div class="metric-primary-val font-mono" id="maeDisplay">₹ 0.00</div>
+                        <p class="metric-caption text-dim">
+                            Mean Absolute Error: average dollar/rupee deviation from actual price.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- RMSE -->
+                <div class="col-md-6 col-lg">
+                    <div class="glass-card metric-box h-100 p-4">
+                        <div class="metric-header text-dim">RMSE</div>
+                        <div class="metric-primary-val font-mono" id="rmseDisplay">₹ 0.00</div>
+                        <p class="metric-caption text-dim">
+                            Root Mean Squared Error: penalizes large forecast outliers heavily.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Training Data -->
+                <div class="col-md-12 col-lg">
+                    <div class="glass-card metric-box h-100 p-4">
+                        <div class="metric-header text-dim">Training Data</div>
+                        <div class="metric-primary-val text-cyan font-mono" id="trainSamplesDisplay">0 Days</div>
+                        <p class="metric-caption text-dim">
+                            80% chronological train split with zero lookahead leakage.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 7. AI INSIGHT CARD (Visually Distinct Card) -->
+        <section id="insight-section" class="mb-5">
+            <div class="glass-card insight-card p-4 p-md-5">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="insight-badge-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                    <div>
+                        <span class="card-eyebrow text-emerald">SYNTHESIZED ANALYSIS</span>
+                        <h3 class="card-heading mb-0">AI Market Insight</h3>
+                    </div>
+                </div>
+
+                <div class="insight-content p-3 rounded-3 mb-3">
+                    <p class="insight-text mb-0" id="aiInsightParagraph">
+                        Based on historical patterns, the model estimates a moderate upward movement for the selected stock over the upcoming forecast horizon.
+                    </p>
+                </div>
+
+                <div class="disclaimer-callout d-flex align-items-start gap-2">
+                    <i class="bi bi-shield-exclamation text-amber fs-5 flex-shrink-0 mt-1"></i>
+                    <p class="disclaimer-text mb-0">
+                        <strong>Academic Notice:</strong> This prediction is generated purely from mathematical regression on past technical data and is <strong>NOT financial advice</strong>. Stock markets are subject to real-world macroeconomic and corporate risks.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. ABOUT MODEL SECTION (Visual 5-Step Flow) -->
+        <section id="about-section" class="mb-5">
+            <div class="glass-card p-4 p-md-5">
+                <div class="text-center mb-5">
+                    <span class="card-eyebrow">SYSTEM ARCHITECTURE</span>
+                    <h2 class="card-heading">How does StockPredict AI work?</h2>
+                    <p class="text-dim small mx-auto" style="max-width: 600px;">
+                        A clean, transparent machine learning pipeline built with Scikit-learn and Pandas.
+                    </p>
+                </div>
+
+                <!-- 5-Step Visual Flow -->
+                <div class="pipeline-flow-container">
+                    <div class="row g-4 position-relative">
+                        
+                        <!-- Step 1 -->
+                        <div class="col-md">
+                            <div class="pipeline-step-box text-center">
+                                <div class="step-icon-circle">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <span class="step-number">01</span>
+                                <h6 class="step-title">Historical Data</h6>
+                                <p class="step-desc text-dim">
+                                    Daily Open, High, Low, Close, and Volume ingested via Yahoo Finance.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="col-md">
+                            <div class="pipeline-step-box text-center">
+                                <div class="step-icon-circle">
+                                    <i class="bi bi-funnel"></i>
+                                </div>
+                                <span class="step-number">02</span>
+                                <h6 class="step-title">Preprocessing</h6>
+                                <p class="step-desc text-dim">
+                                    Chronological 80/20 train-test split without shuffling to avoid data leakage.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="col-md">
+                            <div class="pipeline-step-box text-center">
+                                <div class="step-icon-circle">
+                                    <i class="bi bi-sliders"></i>
+                                </div>
+                                <span class="step-number">03</span>
+                                <h6 class="step-title">Feature Engineering</h6>
+                                <p class="step-desc text-dim">
+                                    Price lags (Lag 1-3), 5/10/20-day SMAs, and intraday volatility %.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="col-md">
+                            <div class="pipeline-step-box text-center">
+                                <div class="step-icon-circle">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <span class="step-number">04</span>
+                                <h6 class="step-title">ML Model</h6>
+                                <p class="step-desc text-dim">
+                                    Linear Regression computes optimal feature weights via Ordinary Least Squares.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="col-md">
+                            <div class="pipeline-step-box text-center">
+                                <div class="step-icon-circle highlight-step">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                </div>
+                                <span class="step-number">05</span>
+                                <h6 class="step-title">Price Prediction</h6>
+                                <p class="step-desc text-dim">
+                                    Multi-step autoregressive rollout predicts future trading days.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 9. FOOTER -->
+    <footer class="fintech-footer py-4 mt-5">
+        <div class="container text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <span class="brand-title">StockPredict <span class="accent-text">AI</span></span>
+                <span class="badge badge-symbol font-mono">v2.0</span>
+            </div>
+            <p class="text-white mb-1 small fw-medium">Academic Machine Learning Project</p>
+            <p class="text-dim small mb-0" style="max-width: 600px; margin: 0 auto;">
+                Predictions are experimental and should not be considered financial advice. Developed for academic practicals and viva demonstration.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Main JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

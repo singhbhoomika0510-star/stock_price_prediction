@@ -1,0 +1,7 @@
+{
+    "Stock": "RELIANCE.NS",
+    "Model": "Random Forest Regressor",
+    "MAE": 16.39,
+    "RMSE": 21.47,
+    "R2_Score": 0.9375
+}

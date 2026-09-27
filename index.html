@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockPredict - Machine Learning Stock Analysis</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2 class="logo">
+                <span class="icon">📈</span> StockPredict
+            </h2>
+            <nav>
+                <a href="#" class="nav-link active" onclick="switchTab(event, 'dashboard')"><span class="icon">🏠</span> Dashboard</a>
+                <a href="#" class="nav-link" onclick="switchTab(event, 'predictions')"><span class="icon">📊</span> Predictions</a>
+                <a href="#" class="nav-link" onclick="switchTab(event, 'analytics')"><span class="icon">⚡</span> Analytics (ML Output)</a>
+                <a href="#" class="nav-link" onclick="switchTab(event, 'history')"><span class="icon">📋</span> Historical Data</a>
+                <a href="#" class="nav-link" onclick="switchTab(event, 'settings')"><span class="icon">⚙️</span> Settings</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+            <!-- DASHBOARD SECTION -->
+            <section id="sec-dashboard" class="page-section" style="display: block;">
+                <!-- Header Section -->
+                <header class="header">
+                    <div>
+                        <h1>Stock Price Prediction</h1>
+                        <p>Machine Learning Based Prediction System</p>
+                    </div>
+                    
+                    <div class="controls glass-panel">
+                        <div class="field">
+                            <label for="stock">Select Stock</label>
+                            <select id="stock">
+                                <option value="RELIANCE">Reliance Industries</option>
+                                <option value="TCS">TCS (Tata Consultancy Services)</option>
+                                <option value="INFY">Infosys</option>
+                                <option value="HDFC">HDFC Bank</option>
+                            </select>
+                        </div>
+                        <button onclick="predictStock()" class="btn-primary">Generate Forecast</button>
+                    </div>
+                </header>
+
+                <!-- Key Metrics Cards -->
+                <div class="cards" style="margin-top: 30px;">
+                    <div class="card glass-panel">
+                        <p>Current Price</p>
+                        <h2 id="currentPrice">₹ 3,260</h2>
+                    </div>
+                    <div class="card glass-panel">
+                        <p>Predicted Price</p>
+                        <h2 id="predictedPrice" class="text-glow">₹ 3,348</h2>
+                    </div>
+                    <div class="card glass-panel">
+                        <p>Expected Change</p>
+                        <h2 id="change" class="positive-change">+2.70%</h2>
+                    </div>
+                    <div class="card glass-panel">
+                        <p>Model RMSE</p>
+                        <h2 id="rmse">₹ 31.4</h2>
+                    </div>
+                </div>
+
+                <!-- Charts and Details Grid -->
+                <div class="dashboard-grid">
+                    <div class="chart-box glass-panel">
+                        <div class="box-header">
+                            <h2>Historical Price Trend</h2>
+                            <p>Past 7 days performance</p>
+                        </div>
+                        <canvas id="stockChart"></canvas>
+                    </div>
+
+                    <div class="details-column">
+                        <div class="prediction-box glass-panel">
+                            <h2>Prediction Summary</h2>
+                            <h1 id="summaryPrice" class="text-glow">₹ 3,348</h1>
+                            <p>Predicted Next-Day Closing Price</p>
+                            
+                            <hr class="divider">
+                            
+                            <div class="info-row">
+                                <span>Model:</span>
+                                <b>Random Forest Regression</b>
+                            </div>
+                            <div class="info-row">
+                                <span>Prediction Horizon:</span>
+                                <b>Next Day</b>
+                            </div>
+                            <div class="info-row">
+                                <span>Confidence:</span>
+                                <b id="confidence">87%</b>
+                            </div>
+                        </div>
+                        
+                        <div class="card glass-panel model-perf">
+                            <h2>Mock Model Performance</h2>
+                            <div class="perf-row"><span>MAE</span> <b id="mae">₹ 192.4</b></div>
+                            <div class="perf-row"><span>RMSE</span> <b id="modelRmse">₹ 284.6</b></div>
+                            <div class="perf-row"><span>R² Score</span> <b id="r2">0.91</b></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS SECTION (REAL ML RESULTS) -->
+            <section id="sec-analytics" class="page-section" style="display: none;">
+                <header class="header">
+                    <div>
+                        <h1>Machine Learning Model Results</h1>
+                        <p>End-to-End Random Forest Regressor Evaluation</p>
+                    </div>
+                </header>
+                
+                <div class="dashboard-grid" style="margin-top: 30px;">
+                    <div class="chart-box glass-panel">
+                        <div class="box-header">
+                            <h2>Actual vs Predicted Prices</h2>
+                            <p>Model Testing Set Evaluation (Reliance Industries)</p>
+                        </div>
+                        <img src="actual_vs_predicted.png" alt="ML Results Chart" style="width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid var(--panel-border);">
+                    </div>
+
+                    <div class="details-column">
+                        <div class="card glass-panel model-perf">
+                            <h2>Real ML Metrics</h2>
+                            <div class="perf-row"><span>Mean Absolute Error (MAE)</span> <b style="color: var(--accent-teal)">₹ 16.39</b></div>
+                            <div class="perf-row"><span>Root Mean Squared Error (RMSE)</span> <b style="color: var(--accent-rose)">₹ 21.47</b></div>
+                            <div class="perf-row"><span>R² Score (Accuracy)</span> <b style="color: var(--accent-teal)">93.75%</b></div>
+                            <hr class="divider">
+                            <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5;">Our Random Forest Regressor explains 93.75% of the variance in the stock price, showing exceptionally high predictive power on the test dataset.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PREDICTIONS SECTION -->
+            <section id="sec-predictions" class="page-section" style="display: none;">
+                <header class="header">
+                    <div>
+                        <h1>Predictions</h1>
+                        <p>Future price forecasting data will appear here.</p>
+                    </div>
+                </header>
+                <div class="card glass-panel" style="margin-top: 30px; text-align: center; padding: 50px;">
+                    <p>Select a stock from the Dashboard to generate detailed future horizons.</p>
+                </div>
+            </section>
+
+            <!-- HISTORICAL DATA SECTION -->
+            <section id="sec-history" class="page-section" style="display: none;">
+                <header class="header">
+                    <div>
+                        <h1>Historical Data</h1>
+                        <p>Raw stock market datasets and feature-engineered records.</p>
+                    </div>
+                </header>
+                <div class="card glass-panel" style="margin-top: 30px; text-align: center; padding: 50px;">
+                    <p>Historical datasets are processed during the Python ML pipeline execution.</p>
+                </div>
+            </section>
+
+            <!-- SETTINGS SECTION -->
+            <section id="sec-settings" class="page-section" style="display: none;">
+                <header class="header">
+                    <div>
+                        <h1>Settings</h1>
+                        <p>Configure model hyper-parameters and UI preferences here.</p>
+                    </div>
+                </header>
+                <div class="card glass-panel" style="margin-top: 30px; text-align: center; padding: 50px;">
+                    <p>UI settings and model configurations coming soon!</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
