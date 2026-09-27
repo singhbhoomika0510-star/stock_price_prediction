@@ -21,9 +21,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import joblib
 
-# Directory to persist trained models
+import tempfile
+
+# Directory where pre-trained models reside (read-only in serverless/Vercel)
 MODELS_DIR = os.path.join(os.path.dirname(__file__), "models")
-os.makedirs(MODELS_DIR, exist_ok=True)
+try:
+    os.makedirs(MODELS_DIR, exist_ok=True)
+except OSError:
+    pass
+
+# Temporary directory for fallback runtime caching if needed
+TEMP_MODELS_DIR = os.path.join("/tmp", "models") if os.path.exists("/tmp") else os.path.join(tempfile.gettempdir(), "models")
 
 # Curated popular stocks with readable labels and currency signs (Rupees as primary currency)
 POPULAR_STOCKS = [
@@ -223,9 +231,43 @@ def train_linear_model(data_featured: pd.DataFrame, symbol: str) -> dict:
     y_train, y_test = y.iloc[:split_index], y.iloc[split_index:]
     dates_train, dates_test = dates.iloc[:split_index], dates.iloc[split_index:]
 
-    # Model Initialization & Fitting
-    model = LinearRegression()
-    model.fit(X_train, y_train)
+    # Model Resolution: ONLY load existing .joblib model files from models/ without writing to /var/task
+    safe_symbol = "".join([c if c.isalnum() else "_" for c in symbol])
+    pre_trained_path = os.path.join(MODELS_DIR, f"{safe_symbol}_linear_model.joblib")
+    tmp_model_path = os.path.join(TEMP_MODELS_DIR, f"{safe_symbol}_linear_model.joblib")
+
+    model = None
+    model_filepath = pre_trained_path
+
+    # 1. Attempt loading from existing pre-trained models/ folder (READ ONLY - NEVER WRITE)
+    if os.path.exists(pre_trained_path):
+        try:
+            model = joblib.load(pre_trained_path)
+            model_filepath = pre_trained_path
+        except Exception as e:
+            print(f"Warning: Could not load pre-trained model {pre_trained_path}: {e}")
+
+    # 2. Check temporary models directory in /tmp if not found in models/
+    if model is None and os.path.exists(tmp_model_path):
+        try:
+            model = joblib.load(tmp_model_path)
+            model_filepath = tmp_model_path
+        except Exception:
+            pass
+
+    # 3. If no pre-existing model file exists, train a new model in memory
+    if model is None:
+        model = LinearRegression()
+        model.fit(X_train, y_train)
+
+        # If temporary files are required, use /tmp instead, NEVER write inside /var/task or MODELS_DIR
+        try:
+            os.makedirs(TEMP_MODELS_DIR, exist_ok=True)
+            joblib.dump(model, tmp_model_path)
+            model_filepath = tmp_model_path
+        except Exception as e:
+            # If writing to /tmp is also restricted, continue smoothly with in-memory model
+            model_filepath = pre_trained_path
 
     # Evaluate on Unseen Test Dataset
     y_pred_test = model.predict(X_test)
@@ -247,11 +289,6 @@ def train_linear_model(data_featured: pd.DataFrame, symbol: str) -> dict:
     ]
     # Sort coefficients by absolute magnitude
     coefficients = sorted(coefficients, key=lambda x: abs(x["weight"]), reverse=True)
-
-    # Save model file
-    safe_symbol = "".join([c if c.isalnum() else "_" for c in symbol])
-    model_filepath = os.path.join(MODELS_DIR, f"{safe_symbol}_linear_model.joblib")
-    joblib.dump(model, model_filepath)
 
     return {
         "model": model,
